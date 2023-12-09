@@ -29,10 +29,26 @@ def get_items(id=None):
         item["id"] = str(item["_id"])
     return items
 
+def get_events(id=None):
+    events_collection = interactive_db.Event
+    if id is None:
+        events = events_collection.find({})
+    else:
+        events = events_collection.find({"_id": ObjectId(id)}) 
+    events = list(events)
+    for event in events:
+        event["id"] = str(event["_id"])  
+    return events
 
 def add_item(description):
     items_collection = interactive_db.User
     items_collection.insert_one({"username":description})
+
+def add_event(title, description, start_datetime, end_datetime, location):
+    items_collection = interactive_db.Event
+    items_collection.insert_one({"title":title, "description":description, "start_datetime":start_datetime, "end_datetime":end_datetime, "location":location})
+
+    
 
 def delete_item(id):
     user_collection = interactive_db.User
