@@ -8,8 +8,8 @@ def get_index():
 
 @route("/list")
 def get_list():
-    items = database.get_items()
-    return template("list.tpl", shopping_list=items)
+    users = database.get_items()
+    return template("list.tpl", interactive_db=users)
 
 @route("/add")
 def get_add():
@@ -17,8 +17,8 @@ def get_add():
 
 @post("/add")
 def post_add():
-    description = request.forms.get("description")
-    database.add_item(description)
+    user = request.forms.get("username")
+    database.add_item(user)
     redirect("/list")
 
 @route("/delete/<id>")
@@ -31,12 +31,12 @@ def get_update(id):
     items = database.get_items(id)
     if len(items) != 1:
         redirect("/list")
-    description = items[0]['description']
+    description = items[0]['username']
     return template("update_item.tpl", id=id, description=description)
 
 @post("/update")
 def post_update():
-    description = request.forms.get("description")
+    description = request.forms.get("username")
     id = request.forms.get("id")
     database.update_item(id, description)
     redirect("/list")

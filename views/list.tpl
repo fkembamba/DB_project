@@ -1,11 +1,11 @@
 <html>
 <body>
-<h2>Shopping List</h2>
+<h2>User List</h2>
 <hr/>
 <table>
-% for item in shopping_list:
+% for item in interactive_db:
   <tr>
-    <td>{{item['description']}}</td>
+    <td>{{item['username']}}</td>
     <td><a href="/update/{{str(item['id'])}}">update</a></td>
     <td><a href="/delete/{{str(item['id'])}}">delete</a></td>
   </tr>
