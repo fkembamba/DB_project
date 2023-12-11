@@ -58,16 +58,12 @@
 
     <!-- Users and Events Section -->
     <section>
-        <h2>Users</h2>
-        <ul>
-            % for user in users:
-                <tr>
-                    <li>
-                        <td>{{user['username']}}</td>
-                    </li>
-                </tr>
-            % end
-        </ul>
+    </head>
+        % if username:
+            <h1>Welcome, {{ username }}!</h1>
+        % else:
+            <h1>Welcome!</h1>
+        % end
 
         <h2>Events</h2>
         <table>
@@ -105,7 +101,7 @@
             <tr>
                 <td>
                     <h2>Add Event</h2>
-                    <form action="/add_event" method="post">
+                    <form action="/create_event" method="post">
                         <label for="title">Title:</label>
                         <input type="text" name="title" required>
                         <label for="description">Description:</label>
