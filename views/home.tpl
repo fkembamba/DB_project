@@ -39,6 +39,7 @@
             width: 100%;
             border-collapse: collapse;
             margin-top: 10px;
+            color:#606060
         }
 
         th, td {
@@ -94,20 +95,12 @@
     </section>
 
     <!-- CRUD Section with Table -->
+    <!-- Link to Create User Page -->
+   
     <section>
-        <table>
-            <!-- Add User Form -->
-            <tr>
-                <td>
-                    <h2>Add User</h2>
-                    <form action="/add" method="post">
-                        <label for="username">Username:</label>
-                        <input type="text" name="username" required>
-                        <button type="submit">Add User</button>
-                    </form>
-                </td>
-            </tr>
-
+        
+        <h2>Create User Page</h2>
+        <a href="/add">Go to Create User Page</a>
             <!-- Add Event Form -->
             <tr>
                 <td>

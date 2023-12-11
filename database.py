@@ -18,7 +18,16 @@ def setup_database():
     for item in ['Tina', 'Fred', 'Abby', 'Alvin', 'Davey']:
         items_collection.insert_one({"username":item})
 
-def get_items(id=None):
+def get_user_by_credentials(username, password):
+    user_collection = interactive_db.User
+    if username is None:
+        user = user_collection.find({})
+    else:
+        user = user_collection.find_one({"username": username, "password": password})
+
+    return user  # Return the user document if found, otherwise None
+
+def get_users(id=None):
     items_collection = interactive_db.User
     if id == None:
         items = items_collection.find({})
@@ -40,7 +49,7 @@ def get_events(id=None):
         event["id"] = str(event["_id"])  
     return events
 
-def add_item(description):
+def add_users(description):
     items_collection = interactive_db.User
     items_collection.insert_one({"username":description})
 
@@ -50,11 +59,11 @@ def add_event(title, description, start_datetime, end_datetime, location):
 
     
 
-def delete_item(id):
+def delete_users(id):
     user_collection = interactive_db.User
     user_collection.delete_one({"_id":ObjectId(id)})
 
-def update_item(id, username):
+def update_users(id, username):
     user_collection = interactive_db.User
     where = {"_id": ObjectId(id)}
     updates = { "$set": { "username": username } }
@@ -63,16 +72,16 @@ def update_item(id, username):
 def test_setup_database():
     print("testing setup_database()")
     setup_database()
-    items = get_items()
+    items = get_users()
     assert len(items) == 5
     descriptions = [item['username'] for item in items]
     for description in ['Tina', 'Fred', 'Abby', 'Alvin', 'Davey']:
         assert description in descriptions
 
-def test_get_items():
+def test_get_users():
     print("testing get_items()")
     setup_database()
-    items = get_items()
+    items = get_users()
     assert type(items) is list
     assert len(items) > 0
     for item in items:
@@ -82,7 +91,7 @@ def test_get_items():
         assert type(item['username']) is str
     example_id = items[0]['id']
     example_description = items[0]['username']
-    items = get_items(example_id)
+    items = get_users(example_id)
     assert len(items) == 1
     assert example_id == items[0]['id']
     assert example_description == items[0]['username']
@@ -90,10 +99,10 @@ def test_get_items():
 def test_add_item():
     print("testing add_item()")
     setup_database()
-    items = get_items()
+    items = get_users()
     original_length = len(items)
-    add_item("Kembamba")
-    items = get_items()
+    add_users("Kembamba")
+    items = get_users()
     assert len(items) == original_length + 1
     descriptions = [item['username'] for item in items]
     assert "Kembamba" in descriptions
@@ -102,12 +111,12 @@ def test_add_item():
 def test_delete_item():
     print("testing delete_item()")
     setup_database()
-    items = get_items()
+    items = get_users()
     original_length = len(items)
     deleted_description = items[1]['username']
     deleted_id = items[1]['id']
-    delete_item(deleted_id)
-    items = get_items()
+    delete_users(deleted_id)
+    items = get_users()
     assert len(items) == original_length - 1
     for item in items:
         assert item['id'] != deleted_id
@@ -116,11 +125,11 @@ def test_delete_item():
 def test_update_item():
     print("testing update_item()")
     setup_database()
-    items = get_items()
+    items = get_users()
     original_description = items[1]['username']
     original_id = items[1]['id']
-    update_item(original_id,"new-description")
-    items = get_items()
+    update_users(original_id,"new-description")
+    items = get_users()
     found = False
     for item in items:
         if item['id'] == original_id:
