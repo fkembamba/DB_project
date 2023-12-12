@@ -154,6 +154,21 @@ def test_update_item():
             found = True
     assert found
 
+def search_events(query, user_id):
+    # Perform a simple search in the 'title' and 'description' fields
+    result_cursor = event_collection.find(
+        {"$and": [
+            {"$or": [{"title": {"$regex": query, "$options": "i"}},
+                     {"description": {"$regex": query, "$options": "i"}}]},
+            {"created_by": ObjectId(user_id)}  # Filter by the user ID
+        ]}
+    )
+
+    # Convert MongoDB cursor to a list of dictionaries
+    search_results = list(result_cursor)
+    
+    return search_results
+
 
 if __name__ == "__main__":
     test_setup_database()

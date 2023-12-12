@@ -51,24 +51,15 @@
         th {
             background-color: #f2f2f2;
         }
-        body {
+         .search-form {
+        position: absolute;
+        top: 20px;
+        right: 20px;
         display: flex;
-        justify-content: space-between;
-        align-items: center; /* Center items vertically */
+        flex-direction: column;
+        align-items: flex-end;
         }
-
-        div {
-        text-align: right; /* Align text to the right */
-        margin: 10px; /* Add margin for spacing */
-        }
-
-        p {
-        margin: 0; /* Remove default margin for the paragraph */
-        }
-
-        a {
-        margin-left: 10px; /* Add margin between login link and welcome message */
-        }
+        
     </style>
 </head>
 <body>
@@ -136,6 +127,12 @@
             % else:
                 <p><a href="/login">Login</a></p>
             % end
+            <!-- Event Search Form -->
+            <form action="/search_events" method="get" class="search-form">
+                <label for="search_query">Search Events:</label>
+                <input type="text" name="search_query" placeholder="Enter keywords">
+                <button type="submit">Search</button>
+            </form>
         </div>
         <a href="/add">Create User</a>
             <!-- Add Event Form -->

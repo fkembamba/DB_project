@@ -63,7 +63,7 @@ def get_home():
         # Assuming you have functions to get users and events from the database
         users = database.get_users()
         events = database.get_events()
-        return template("home.tpl", users=users, events=events, username = username, id = id, color_code = color_code)
+        return template("home.tpl", users=users, events=events, username = username, message="", id = id, color_code = color_code)
     else:
         # Redirect to the login page if credentials are incorrect
         redirect("/login")
@@ -149,14 +149,20 @@ def create_event():
 
         if result:
             # Event creation successful
-            return "Event created successfully!"
+            message = "Event created successfully!"
         else:
             # Event creation failed
-            return "Failed to create the event."
+            message = "Failed to create the event."
 
     else:
         # User not logged in
-        return "You need to be logged in to create an event."
+        message = "You need to be logged in to create an event."
+    # Retrieve the events and users (you may have different logic here)
+    events = database.get_events()
+    users = database.get_users()
+
+    # Pass the events, users, and message to the template
+    return template('home', events=events, users=users, message=message, username=user_id)
     
 @route('/delete_event/<event_id>', method='GET')
 def delete_event(event_id):
@@ -239,7 +245,20 @@ def update_event(event_id):
     else:
         # User not logged in
         return "You need to be logged in to update an event."
+    
+@route('/search_events', method='GET')
+def event_search():
+    search_query = request.query.get('search_query', '')
+    user_id = request.get_cookie("user_id")  # Assuming user authentication is implemented
 
-
+    if user_id:
+        # Assuming search_events returns a list of events based on the search query and user ID
+        search_results = database.search_events(search_query, user_id)
+        
+        # Pass the search query and results to the template
+        return template('search', search_query=search_query, search_results=search_results, username=user_id)
+    else:
+        # Redirect to login if the user is not logged in
+        return template('login')  # Update with your actual login template route   
 
 run(host='localhost', port=8080)
