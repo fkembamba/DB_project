@@ -51,6 +51,24 @@
         th {
             background-color: #f2f2f2;
         }
+        body {
+        display: flex;
+        justify-content: space-between;
+        align-items: center; /* Center items vertically */
+        }
+
+        div {
+        text-align: right; /* Align text to the right */
+        margin: 10px; /* Add margin for spacing */
+        }
+
+        p {
+        margin: 0; /* Remove default margin for the paragraph */
+        }
+
+        a {
+        margin-left: 10px; /* Add margin between login link and welcome message */
+        }
     </style>
 </head>
 <body>
@@ -66,6 +84,7 @@
         % end
 
         <h2>Events</h2>
+        <div class="event-theme">
         <table>
             <tr>
                 <th>Title</th>
@@ -77,27 +96,53 @@
                 <th>Delete Event</th>
             </tr>
             % for event in events:
-                <tr>
-                    <td>{{event['title']}}</td>
-                    <td>{{event['description']}}</td>
-                    <td>{{event['start_datetime']}}</td>
-                    <td>{{event['end_datetime']}}</td>
-                    <td>{{event['location']}}</td>
-                    <td><a href="/update/{{str(event['id'])}}">update</a></td>
-                    <td><a href="/delete/{{str(event['id'])}}">delete</a></td>
-                </tr>
+                I %for user in users:
+                    <tr style="background-color: {{user['color_code']}};">
+                        <td>{{event['title']}}</td>
+                        <td>{{event['description']}}</td>
+                        <td>{{event['start_datetime']}}</td>
+                        <td>{{event['end_datetime']}}</td>
+                        <td>{{event['location']}}</td>
+                        <td><a href="/update_event/{{str(event['id'])}}">update</a></td>
+                        <td><a href="/delete_event/{{str(event['id'])}}">delete</a></td>
+                    </tr>
+                % end
             % end
         </table>
+        </div>
+        <!-- Update Event Form -->
+    <h2>Update Event</h2>
+    <form action="/update_event/{{str(event['id'])}}" method="post">
+        <label for="title">Title:</label>
+        <input type="text" name="title" value="{{ event['title'] }}" required>
+        <label for="description">Description:</label>
+        <textarea name="description" required>{{ event['description'] }}</textarea>
+        <label for="start_datetime">Start Date and Time:</label>
+        <input type="text" name="start_datetime" value="{{ event['start_datetime'] }}" required>
+        <label for="end_datetime">End Date and Time:</label>
+        <input type="text" name="end_datetime" value="{{ event['end_datetime'] }}" required>
+        <label for="location">Location:</label>
+        <input type="text" name="location" value="{{ event['location'] }}" required>
+        <button type="submit">Update Event</button>
+    </form>
     </section>
 
     <!-- CRUD Section with Table -->
     <!-- Link to Create User Page -->
    
     <section>
-        
+        <div>
+        % if username:
+            <p>Welcome, {{ username }}! <a href="/logout">Logout</a></p>
+         % else:
+            % # Add your login link here 
+            <p><a href="/login">Login</a></p>
+        % end
+        </div>
         <h2>Create User Page</h2>
         <a href="/add">Go to Create User Page</a>
             <!-- Add Event Form -->
+            
             <tr>
                 <td>
                     <h2>Add Event</h2>

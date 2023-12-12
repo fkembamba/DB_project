@@ -1,5 +1,6 @@
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
+from pymongo import InsertOne
 
 from bson.objectid import ObjectId
 
@@ -11,6 +12,8 @@ uri= "mongodb+srv://Kembamba:kem2023@cluster0.ebkomh4.mongodb.net/?retryWrites=t
 client = MongoClient(uri, server_api=ServerApi('1'))
 
 interactive_db = client.interactive_calendar
+event_collection = interactive_db.Event
+
 
 def setup_database():
     interactive_db.drop_collection(interactive_db.User)
@@ -28,22 +31,22 @@ def get_user_by_credentials(username, password):
     return user  # Return the user document if found, otherwise None
 
 def get_users(id=None):
-    items_collection = interactive_db.User
+    users_collection = interactive_db.User
     if id == None:
-        items = items_collection.find({})
+        users = users_collection.find({})
     else:
-        items = items_collection.find({"_id":ObjectId(id)})
-    items = list(items)
-    for item in items:
-        item["id"] = str(item["_id"])
-    return items
+        users = users_collection.find({"_id":ObjectId(id)})
+    users = list(users)
+    for user in users:
+        user["id"] = str(user["_id"])
+    return users
 
 def get_events(id=None):
-    events_collection = interactive_db.Event
+    event_collection = interactive_db.Event
     if id is None:
-        events = events_collection.find({})
+        events = event_collection.find({})
     else:
-        events = events_collection.find({"_id": ObjectId(id)}) 
+        events = event_collection.find({"_id": ObjectId(id)}) 
     events = list(events)
     for event in events:
         event["id"] = str(event["_id"])  
@@ -51,11 +54,25 @@ def get_events(id=None):
 
 def add_users(description):
     items_collection = interactive_db.User
-    items_collection.insert_one({"username":description})
+    if items_collection.insert_one({"username":description}):
+        return True
+    return False
 
-def add_event(title, description, start_datetime, end_datetime, location):
-    items_collection = interactive_db.Event
-    items_collection.insert_one({"title":title, "description":description, "start_datetime":start_datetime, "end_datetime":end_datetime, "location":location})
+def add_event(document):
+    try:
+        event_collection = interactive_db.Event
+        result = event_collection.bulk_write([InsertOne(document)])
+        
+        # Check the result to determine if the insertion was successful
+        if result.inserted_count > 0:
+            return True  # Event creation successful
+        else:
+            return False  # Event creation failed
+
+    except Exception as e:
+        # Handle exceptions if any
+        print(f"Error adding event: {e}")
+        return False  # Event creation failed due to an exception
 
     
 
