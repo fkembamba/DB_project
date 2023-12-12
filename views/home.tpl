@@ -96,17 +96,15 @@
                 <th>Delete Event</th>
             </tr>
             % for event in events:
-                I %for user in users:
-                    <tr style="background-color: {{user['color_code']}};">
-                        <td>{{event['title']}}</td>
-                        <td>{{event['description']}}</td>
-                        <td>{{event['start_datetime']}}</td>
-                        <td>{{event['end_datetime']}}</td>
-                        <td>{{event['location']}}</td>
-                        <td><a href="/update_event/{{str(event['id'])}}">update</a></td>
-                        <td><a href="/delete_event/{{str(event['id'])}}">delete</a></td>
-                    </tr>
-                % end
+                <tr>
+                    <td>{{event['title']}}</td>
+                    <td>{{event['description']}}</td>
+                    <td>{{event['start_datetime']}}</td>
+                    <td>{{event['end_datetime']}}</td>
+                    <td>{{event['location']}}</td>
+                    <td><a href="/update_event/{{str(event['id'])}}">update</a></td>
+                    <td><a href="/delete_event/{{str(event['id'])}}">delete</a></td>
+                </tr>
             % end
         </table>
         </div>
@@ -131,16 +129,15 @@
     <!-- Link to Create User Page -->
    
     <section>
-        <div>
-        % if username:
-            <p>Welcome, {{ username }}! <a href="/logout">Logout</a></p>
-         % else:
-            % # Add your login link here 
-            <p><a href="/login">Login</a></p>
-        % end
-        </div>
         <h2>Create User Page</h2>
-        <a href="/add">Go to Create User Page</a>
+        <div>
+            % if username:
+                <p>Welcome, {{ username }}! <a href="/logout">Logout</a></p>
+            % else:
+                <p><a href="/login">Login</a></p>
+            % end
+        </div>
+        <a href="/add">Create User</a>
             <!-- Add Event Form -->
             
             <tr>
