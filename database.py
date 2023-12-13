@@ -3,6 +3,7 @@ from pymongo.server_api import ServerApi
 from pymongo import InsertOne
 
 from bson.objectid import ObjectId
+from bottle import route, request,template
 
 uri= "mongodb+srv://Kembamba:kem2023@cluster0.ebkomh4.mongodb.net/?retryWrites=true&w=majority"
 
@@ -168,6 +169,30 @@ def search_events(query, user_id):
     search_results = list(result_cursor)
     
     return search_results
+
+# Example function to retrieve event details by event_id
+def get_event_details(event_id):
+    # Assuming you have a MongoDB collection named 'events'
+    event = event_collection.find_one({'_id': ObjectId(event_id)})
+    print("From get_event_details", event)
+    return event
+
+# Example function to update event details
+
+def update_event_details(event_id, form_data):
+    # Update the event details based on the form data
+    event_collection.update_one(
+        {'_id': ObjectId(event_id)},
+        {
+            '$set': {
+                'title': form_data.get('title', ''),
+                'description': form_data.get('description', ''),
+                'start_datetime': form_data.get('start_datetime', ''),
+                'end_datetime': form_data.get('end_datetime', ''),
+                'location': form_data.get('location', ''),
+            }
+        }
+    )
 
 
 if __name__ == "__main__":

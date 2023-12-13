@@ -120,13 +120,12 @@ def post_update():
 
 @route('/create_event', method='POST')
 def create_event():
-    # Assuming you have a user ID stored in cookies
+    # Retrieve user ID stored in cookies
     user_id = request.get_cookie("user_id")
     print("Let's check here", user_id)
 
     # Check if the user is logged in
     if user_id:
-        print(user_id)
         # Get event details from the form or request data
         title = request.forms.get('title')
         description = request.forms.get('description')
@@ -246,6 +245,31 @@ def update_event(event_id):
         # User not logged in
         return "You need to be logged in to update an event."
     
+@route('/load_update_page/<event_id>')
+def load_update_page(event_id):
+    # Retrieve event details based on event_id
+    # You may need to adapt this to your database retrieval logic
+    #print("From load_update_page",event_id)
+    event = database.get_event_details(event_id)
+
+    # Render the update page with the event details
+    return template('event_update', events=event)
+
+@route('/update_event/<event_id>', method='post')
+def update_event(event_id):
+    
+    updated_event = database.update_event_details(event_id, request.forms)
+    
+    if updated_event:
+        message = "Event updated successfully"
+    else:
+        message = "Update failed"
+
+    # Redirect to the events page with a message
+    return redirect('/home?message=' + message)
+
+
+
 @route('/search_events', method='GET')
 def event_search():
     search_query = request.query.get('search_query', '')

@@ -67,7 +67,6 @@
 
     <!-- Users and Events Section -->
     <section>
-    </head>
         % if username:
             <h1>Welcome, {{ username }}!</h1>
         % else:
@@ -76,44 +75,36 @@
 
         <h2>Events</h2>
         <div class="event-theme">
-        <table>
-            <tr>
-                <th>Title</th>
-                <th>Description</th>
-                <th>Start Datetime</th>
-                <th>End Datetime</th>
-                <th>Location</th>
-                <th>Update Event</th>
-                <th>Delete Event</th>
-            </tr>
-            % for event in events:
+            <table>
                 <tr>
-                    <td>{{event['title']}}</td>
-                    <td>{{event['description']}}</td>
-                    <td>{{event['start_datetime']}}</td>
-                    <td>{{event['end_datetime']}}</td>
-                    <td>{{event['location']}}</td>
-                    <td><a href="/update_event/{{str(event['id'])}}">update</a></td>
-                    <td><a href="/delete_event/{{str(event['id'])}}">delete</a></td>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Start Datetime</th>
+                    <th>End Datetime</th>
+                    <th>Location</th>
+                    <th>Update Event</th>
+                    <th>Delete Event</th>
                 </tr>
-            % end
-        </table>
+                % for event in events:
+                    <tr>
+                        <td>{{event['title']}}</td>
+                        <td>{{event['description']}}</td>
+                        <td>{{event['start_datetime']}}</td>
+                        <td>{{event['end_datetime']}}</td>
+                        <td>{{event['location']}}</td>
+                          <td><a href="/load_update_page/{{str(event['id'])}}">update</a></td>
+                        <td><a href="/delete_event/{{str(event['id'])}}">delete</a></td>
+                    </tr>
+                % end
+                <div>
+                % if message:
+                    <p> {{ message }}! </p>
+                %end
+            </div>
+            </table>
         </div>
-        <!-- Update Event Form -->
-    <h2>Update Event</h2>
-    <form action="/update_event/{{str(event['id'])}}" method="post">
-        <label for="title">Title:</label>
-        <input type="text" name="title" value="{{ event['title'] }}" required>
-        <label for="description">Description:</label>
-        <textarea name="description" required>{{ event['description'] }}</textarea>
-        <label for="start_datetime">Start Date and Time:</label>
-        <input type="text" name="start_datetime" value="{{ event['start_datetime'] }}" required>
-        <label for="end_datetime">End Date and Time:</label>
-        <input type="text" name="end_datetime" value="{{ event['end_datetime'] }}" required>
-        <label for="location">Location:</label>
-        <input type="text" name="location" value="{{ event['location'] }}" required>
-        <button type="submit">Update Event</button>
-    </form>
+
+
     </section>
 
     <!-- CRUD Section with Table -->
