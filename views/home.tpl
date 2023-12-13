@@ -118,6 +118,7 @@
             % else:
                 <p><a href="/login">Login</a></p>
             % end
+
             <!-- Event Search Form -->
             <form action="/search_events" method="get" class="search-form">
                 <label for="search_query">Search Events:</label>
@@ -125,6 +126,7 @@
                 <button type="submit">Search</button>
             </form>
         </div>
+        
         <a href="/add">Create User</a>
             <!-- Add Event Form -->
             

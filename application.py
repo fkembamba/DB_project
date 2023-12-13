@@ -41,6 +41,9 @@ def post_login():
     return redirect("/login")
 
 
+@route("/create_user")
+def create_user():
+    return template("create_user.tpl")
 # Route for rendering the login page
 @route("/login")
 def get_login():
@@ -79,9 +82,23 @@ def get_add():
 
 @post("/add")
 def post_add():
-    user = request.forms.get("username")
-    database.add_users(user)
-    redirect("/home")
+    username = request.forms.get("username")
+    password = request.forms.get("password")
+    confirm_password = request.forms.get("confirm_password")
+    color_code = request.forms.get("color_code")
+
+    if password == confirm_password:
+        check = database.add_users(username, password, color_code)
+        if check:
+            umessage = "User created successfully"
+            redirect("/home?message=" + umessage)  # Pass the message as a query parameter
+        else:
+            umessage = "User creation failed"
+            redirect("/home?message=" + umessage)  # Pass the message as a query parameter
+    else:
+        umessage = "Unmatched passwords"
+        redirect("/create_user?message=" + umessage)  # Pass the message as a query parameter
+        
 
 @route("/add_event")
 def get_addevent():
