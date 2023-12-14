@@ -53,7 +53,7 @@
 <body>
 
     <section>
-        <form action="/add" method="post">
+        <form action="/add_user" method="post">
             <label for="username">Username:</label>
             <input type="text" name="username" required>
 

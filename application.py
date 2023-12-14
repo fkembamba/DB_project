@@ -9,7 +9,6 @@ def check_credentials(username, password):
     users = database.get_users()
     for user in users:
         if user["username"] == username and user["password"] == password:
-            print("This checked")
             return True
     return False
 
@@ -57,13 +56,13 @@ def logout():
 
 @route("/home")
 def get_home():
-    # Check if the username and password are correct (you need to implement this logic)
+    # Check if the username and password are correct 
     username = request.get_cookie("username")
     password = request.get_cookie("password")
     color_code = request.get_cookie("color_code")
 
     if database.get_user_by_credentials(username, password):
-        # Assuming you have functions to get users and events from the database
+        # get users and events from the database
         users = database.get_users()
         events = database.get_events()
         return template("home.tpl", users=users, events=events, username = username, message="", id = id, color_code = color_code)
@@ -71,16 +70,16 @@ def get_home():
         # Redirect to the login page if credentials are incorrect
         redirect("/login")
 
-@route("/list")
+@route("/user_list")
 def get_list():
     users = database.get_users()
-    return template("list.tpl", interactive_db=users)
+    return template("user_list.tpl", interactive_db=users)
 
-@route("/add")
+@route("/add_user")
 def get_add():
     return template("create_user.tpl")
 
-@post("/add")
+@post("/add_user")
 def post_add():
     username = request.forms.get("username")
     password = request.forms.get("password")
@@ -115,25 +114,25 @@ def post_addevent(user_id):
     database.add_event(title, description, start_datetime, end_datetime, location, created_by)
     redirect("/home")
 
-@route("/delete/<id>")
+@route("/delete_user/<id>")
 def get_delete(id):
     database.delete_users(id)
-    redirect("/list")
+    redirect("/user_list")
 
-@route("/update/<id>")
+@route("/update_user/<id>")
 def get_update(id):
     items = database.get_users(id)
     if len(items) != 1:
-        redirect("/list")
+        redirect("/user_list")
     description = items[0]['username']
-    return template("update_item.tpl", id=id, description=description)
+    return template("user_update.tpl", id=id, description=description)
 
 @post("/update")
 def post_update():
     description = request.forms.get("username")
     id = request.forms.get("id")
     database.update_users(id, description)
-    redirect("/list")
+    redirect("/user_list")
 
 @route('/create_event', method='POST')
 def create_event():

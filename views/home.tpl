@@ -127,7 +127,8 @@
             </form>
         </div>
         
-        <a href="/add">Create User</a>
+        <a href="/add_user">Create User</a><br>
+        <a href="/user_list">User Managment</a>
             <!-- Add Event Form -->
             
             <tr>
